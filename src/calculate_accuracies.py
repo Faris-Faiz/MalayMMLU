@@ -3,6 +3,11 @@ import os
 import json
 import argparse
 
+# Get the directory where the script is located.
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Navigate up one directory to access the 'data' folder which is a sibling of 'src'.
+project_root = os.path.dirname(script_dir)
+
 def calculate_accuracy(task,mmlu,filename,closed_flag, keep_idxs=None):
     if task == "MalayMMLU":
         if keep_idxs == None:
@@ -98,7 +103,8 @@ def calculate_accuracy(task,mmlu,filename,closed_flag, keep_idxs=None):
 
 def main(pred_files, shot, output_dir,closed_flag):
     os.makedirs(output_dir, exist_ok=True)
-    mmlu = pd.read_json(f'data/MalayMMLU_{shot}shot.json')
+    data_path = os.path.join(project_root, 'data', f'MalayMMLU_{shot}shot.json')
+    mmlu = pd.read_json(data_path)
     print("loaded data")
     
     

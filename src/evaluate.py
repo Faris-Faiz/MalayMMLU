@@ -11,6 +11,11 @@ from utils import predict_classification_causal_by_letter as predict_classificat
 device = "cuda"
 # usage: python evaluate.py  --by_letter --shot 0 --task=MalayMMLU --base_model=google/gemma-2b-it --output_folder=$HOME/MalayMMLU/output/  --token $TOKEN
 
+# Get the directory where the script is located.
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Navigate up one directory to access the 'data' folder which is a sibling of 'src'.
+project_root = os.path.dirname(script_dir)
+
 def prepare_data(playground,model_name, tokenizer,task):
     if task=="MalayMMLU":
         inputs = []
@@ -18,7 +23,8 @@ def prepare_data(playground,model_name, tokenizer,task):
         outputs_options = []
         key2id = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4}
         shot = 0
-        data = pd.read_json(f'data/MalayMMLU_{shot}shot.json')
+        data_path = os.path.join(project_root, 'data', f'MalayMMLU_{shot}shot.json')
+        data = pd.read_json(data_path)
         if playground:
             data = data.iloc[:500]
         for idx, row in data.iterrows():
@@ -48,7 +54,8 @@ def prepare_data_few_shot(shot, model_name, tokenizer,task):
         outputs = []
         outputs_options = []
         key2id = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4}
-        data = pd.read_json(f'data/MalayMMLU_{shot}shot.json')
+        data_path = os.path.join(project_root, 'data', f'MalayMMLU_{shot}shot.json')
+        data = pd.read_json(data_path)
 
         for i in range(len(data)):
             row = data.iloc[i]
